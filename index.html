@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#f7f7f8">
 <link rel="manifest" href="manifest.json">
-<meta name="application-name" content="分子・溶液計算">
+<meta name="application-name" content="試薬量計算">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="試薬量計算">
@@ -172,7 +172,7 @@
       <div class="row">
         <div>
           <label>分子量</label>
-          <input id="mw1" type="number" inputmode="decimal" value="0" step="any">
+          <input id="mw1" type="number" inputmode="decimal" value="0" min="0" step="any">
         </div>
         <div>
           <label>単位</label>
@@ -183,7 +183,7 @@
       <div class="row">
         <div>
           <label>質量濃度</label>
-          <input id="mc1" type="number" inputmode="decimal" value="0" step="any">
+          <input id="mc1" type="number" inputmode="decimal" value="0" min="0" step="any">
         </div>
         <div>
           <label>単位</label>
@@ -217,6 +217,7 @@
         </div>
         <div class="result-value" id="mol1out">—</div>
         <div class="copy-status" id="mol1out-status" aria-live="polite"></div>
+        <div class="warn" id="mol1warn" aria-live="polite"></div>
       </div>
     </div>
   </section>
@@ -227,15 +228,15 @@
       <h2>目的濃度 → 必要質量</h2>
 
       <div class="row">
-        <div><label>分子量</label><input id="mw2" type="number" inputmode="decimal" value="0" step="any"></div>
+        <div><label>分子量</label><input id="mw2" type="number" inputmode="decimal" value="0" min="0" step="any"></div>
         <div><label>単位</label><select id="mw2u"><option>kDa</option><option>g/mol</option></select></div>
       </div>
       <div class="row">
-        <div><label>目的濃度</label><input id="c2" type="number" inputmode="decimal" value="0" step="any"></div>
+        <div><label>目的濃度</label><input id="c2" type="number" inputmode="decimal" value="0" min="0" step="any"></div>
         <div><label>単位</label><select id="c2u"><option>M</option><option>mM</option><option selected>µM</option><option>nM</option></select></div>
       </div>
       <div class="row">
-        <div><label>最終体積</label><input id="v2" type="number" inputmode="decimal" value="0" step="any"></div>
+        <div><label>最終体積</label><input id="v2" type="number" inputmode="decimal" value="0" min="0" step="any"></div>
         <div><label>単位</label><select id="v2u"><option>L</option><option>mL</option><option selected>µL</option><option>nL</option></select></div>
       </div>
       <div class="row">
@@ -250,6 +251,7 @@
         </div>
         <div class="result-value" id="mass2out">—</div>
         <div class="copy-status" id="mass2out-status" aria-live="polite"></div>
+        <div class="warn" id="mass2warn" aria-live="polite"></div>
       </div>
     </div>
   </section>
@@ -260,15 +262,15 @@
       <h2>希釈</h2>
 
       <div class="row">
-        <div><label>原液濃度 C₁</label><input id="d_c1" type="number" inputmode="decimal" value="0" step="any"></div>
+        <div><label>原液濃度 C₁</label><input id="d_c1" type="number" inputmode="decimal" value="0" min="0" step="any"></div>
         <div><label>単位</label><select id="d_c1u"><option>M</option><option selected>mM</option><option>µM</option><option>nM</option></select></div>
       </div>
       <div class="row">
-        <div><label>目的濃度 C₂</label><input id="d_c2" type="number" inputmode="decimal" value="0" step="any"></div>
+        <div><label>目的濃度 C₂</label><input id="d_c2" type="number" inputmode="decimal" value="0" min="0" step="any"></div>
         <div><label>単位</label><select id="d_c2u"><option>M</option><option selected>mM</option><option>µM</option><option>nM</option></select></div>
       </div>
       <div class="row">
-        <div><label>最終体積 V₂</label><input id="d_v2" type="number" inputmode="decimal" value="0" step="any"></div>
+        <div><label>最終体積 V₂</label><input id="d_v2" type="number" inputmode="decimal" value="0" min="0" step="any"></div>
         <div><label>単位</label><select id="d_v2u"><option>L</option><option>mL</option><option selected>µL</option><option>nL</option></select></div>
       </div>
       <div class="row">
@@ -291,7 +293,7 @@
         <div class="small-result" id="d_bufout"></div>
         <div class="copy-status" id="d_bufout-status" aria-live="polite"></div>
 
-        <div class="warn" id="d_warn">目的濃度は原液濃度より低く設定してください。</div>
+        <div class="warn" id="d_warn" aria-live="polite"></div>
       </div>
     </div>
   </section>
@@ -302,19 +304,19 @@
       <h2>濃度調整</h2>
 
       <div class="row">
-        <div><label>現在のサンプル体積</label><input id="a_v0" type="number" inputmode="decimal" value="0" step="any"></div>
+        <div><label>現在のサンプル体積</label><input id="a_v0" type="number" inputmode="decimal" value="0" min="0" step="any"></div>
         <div><label>単位</label><select id="a_v0u"><option>L</option><option>mL</option><option selected>µL</option><option>nL</option></select></div>
       </div>
       <div class="row">
-        <div><label>現在濃度 C₀</label><input id="a_c0" type="number" inputmode="decimal" value="0" step="any"></div>
+        <div><label>現在濃度 C₀</label><input id="a_c0" type="number" inputmode="decimal" value="0" min="0" step="any"></div>
         <div><label>単位</label><select id="a_c0u"><option>M</option><option selected>mM</option><option>µM</option><option>nM</option></select></div>
       </div>
       <div class="row">
-        <div><label>添加溶液の濃度 Cₛ</label><input id="a_cs" type="number" inputmode="decimal" value="0" step="any"></div>
+        <div><label>添加溶液の濃度 Cₛ</label><input id="a_cs" type="number" inputmode="decimal" value="0" min="0" step="any"></div>
         <div><label>単位</label><select id="a_csu"><option>M</option><option selected>mM</option><option>µM</option><option>nM</option></select></div>
       </div>
       <div class="row">
-        <div><label>目的濃度 Cₜ</label><input id="a_ct" type="number" inputmode="decimal" value="0" step="any"></div>
+        <div><label>目的濃度 Cₜ</label><input id="a_ct" type="number" inputmode="decimal" value="0" min="0" step="any"></div>
         <div><label>単位</label><select id="a_ctu"><option>M</option><option selected>mM</option><option>µM</option><option>nM</option></select></div>
       </div>
       <div class="row">
@@ -337,7 +339,7 @@
         <div class="small-result" id="a_finalout"></div>
         <div class="copy-status" id="a_finalout-status" aria-live="polite"></div>
 
-        <div class="warn" id="a_warn">原液濃度は目的濃度より高く設定してください。</div>
+        <div class="warn" id="a_warn" aria-live="polite"></div>
       </div>
       <div class="formula">計算式：Vadd = (Ct − C0) × V0 / (Cs − Ct)</div>
     </div>
@@ -349,15 +351,15 @@
       <h2>質量濃度 → 物質量</h2>
 
       <div class="row">
-        <div><label>分子量</label><input id="mw5" type="number" inputmode="decimal" value="0" step="any"></div>
+        <div><label>分子量</label><input id="mw5" type="number" inputmode="decimal" value="0" min="0" step="any"></div>
         <div><label>単位</label><select id="mw5u"><option>kDa</option><option>g/mol</option></select></div>
       </div>
       <div class="row">
-        <div><label>質量濃度</label><input id="mc5" type="number" inputmode="decimal" value="0" step="any"></div>
+        <div><label>質量濃度</label><input id="mc5" type="number" inputmode="decimal" value="0" min="0" step="any"></div>
         <div><label>単位</label><select id="mc5u"><option>g/L</option><option>mg/mL</option><option>µg/µL</option><option>µg/mL</option><option>ng/µL</option></select></div>
       </div>
       <div class="row">
-        <div><label>使用体積</label><input id="v5" type="number" inputmode="decimal" value="0" step="any"></div>
+        <div><label>使用体積</label><input id="v5" type="number" inputmode="decimal" value="0" min="0" step="any"></div>
         <div><label>単位</label><select id="v5u"><option>L</option><option>mL</option><option selected>µL</option><option>nL</option></select></div>
       </div>
       <div class="row">
@@ -389,6 +391,7 @@
         </div>
         <div class="small-result" id="mass5out"></div>
         <div class="copy-status" id="mass5out-status" aria-live="polite"></div>
+        <div class="warn" id="amount5warn" aria-live="polite"></div>
       </div>
     </div>
   </section>
@@ -407,7 +410,7 @@ function mwToGmol(v,u){ return u==="kDa" ? v*1000 : v; }
 function molToM(v,u){ return v*({M:1,mM:1e-3,"µM":1e-6,nM:1e-9}[u]||1); }
 function volToL(v,u){ return v*({L:1,mL:1e-3,"µL":1e-6,nL:1e-9}[u]||1); }
 function massConcToGL(v,u){
-  return v*({"g/L":1,"mg/mL":1,"µg/µL":1,"µg/mL":1e-3,"ng/µL":1}[u]||1);
+  return v*({"g/L":1,"mg/mL":1,"µg/µL":1,"µg/mL":1e-3,"ng/µL":1e-3}[u]||1);
 }
 function fmt(x, digits=6){
   if(!Number.isFinite(x)) return "—";
@@ -420,22 +423,52 @@ function convertMolarFromM(v,u){ return v/({M:1,mM:1e-3,"µM":1e-6,nM:1e-9}[u]||
 function convertVolumeFromL(v,u){ return v/({L:1,mL:1e-3,"µL":1e-6,nL:1e-9}[u]||1); }
 function convertMassFromG(v,u){ return v/({g:1,mg:1e-3,"µg":1e-6,ng:1e-9,pg:1e-12}[u]||1); }
 function convertAmountFromMol(v,u){ return v/({mol:1,mmol:1e-3,"µmol":1e-6,nmol:1e-9,pmol:1e-12,fmol:1e-15}[u]||1); }
+function isNonnegative(v){ return Number.isFinite(v) && v>=0; }
+function isPositive(v){ return Number.isFinite(v) && v>0; }
+function setResult(id,value,unit){
+  $(id).textContent=Number.isFinite(value) ? fmt(value)+" "+unit : "—";
+}
+function showWarning(warnId,message,outputIds){
+  outputIds.forEach(id=>$(id).textContent="—");
+  const warn=$(warnId);
+  warn.textContent=message;
+  warn.style.display="block";
+}
+function hideWarning(warnId){
+  const warn=$(warnId);
+  warn.textContent="";
+  warn.style.display="none";
+}
 
 function calc1(){
   const mw=mwToGmol(num("mw1"),$("mw1u").value);
   const gl=massConcToGL(num("mc1"),$("mc1u").value);
   const outU=$("mol1u").value;
+
+  if(!isPositive(mw) || !isNonnegative(gl)){
+    showWarning("mol1warn","分子量は0より大きく、質量濃度は0以上にしてください。",["mol1out"]);
+    return;
+  }
+
+  hideWarning("mol1warn");
   const M=gl/mw;
-  $("mol1out").textContent=fmt(convertMolarFromM(M,outU))+" "+outU;
+  setResult("mol1out",convertMolarFromM(M,outU),outU);
 }
 
 function calc2(){
   const mw=mwToGmol(num("mw2"),$("mw2u").value);
   const M=molToM(num("c2"),$("c2u").value);
   const L=volToL(num("v2"),$("v2u").value);
-  const g=M*L*mw;
   const outU=$("mass2u").value;
-  $("mass2out").textContent=fmt(convertMassFromG(g,outU))+" "+outU;
+
+  if(!isPositive(mw) || !isNonnegative(M) || !isNonnegative(L)){
+    showWarning("mass2warn","分子量は0より大きく、濃度と体積は0以上にしてください。",["mass2out"]);
+    return;
+  }
+
+  hideWarning("mass2warn");
+  const g=M*L*mw;
+  setResult("mass2out",convertMassFromG(g,outU),outU);
 }
 
 function calc3(){
@@ -443,19 +476,20 @@ function calc3(){
   const c2=molToM(num("d_c2"),$("d_c2u").value);
   const v2L=volToL(num("d_v2"),$("d_v2u").value);
   const outU=$("d_outu").value;
-  const warn=$("d_warn");
 
-  if(!(c1>c2) || c1<=0 || c2<0){
-    $("d_v1out").textContent="—";
-    $("d_bufout").textContent="";
-    warn.style.display="block";
+  if(!isPositive(c1) || !isNonnegative(c2) || !isPositive(v2L)){
+    showWarning("d_warn","原液濃度と最終体積は0より大きく、目的濃度は0以上にしてください。",["d_v1out","d_bufout"]);
+    return;
+  }
+  if(c2>c1){
+    showWarning("d_warn","目的濃度は原液濃度以下にしてください。",["d_v1out","d_bufout"]);
     return;
   }
 
-  warn.style.display="none";
+  hideWarning("d_warn");
   const v1L=c2*v2L/c1;
-  $("d_v1out").textContent=fmt(convertVolumeFromL(v1L,outU))+" "+outU;
-  $("d_bufout").textContent=fmt(convertVolumeFromL(v2L-v1L,outU))+" "+outU;
+  setResult("d_v1out",convertVolumeFromL(v1L,outU),outU);
+  setResult("d_bufout",convertVolumeFromL(v2L-v1L,outU),outU);
 }
 
 function calc4(){
@@ -464,32 +498,49 @@ function calc4(){
   const cs=molToM(num("a_cs"),$("a_csu").value);
   const ct=molToM(num("a_ct"),$("a_ctu").value);
   const outU=$("a_outu").value;
-  const warn=$("a_warn");
 
-  if(!(cs>ct) || ct<c0){
-    $("a_addout").textContent="—";
-    $("a_finalout").textContent="";
-    warn.style.display="block";
+  if(!isPositive(v0L) || !isNonnegative(c0) || !isNonnegative(cs) || !isNonnegative(ct)){
+    showWarning("a_warn","現在のサンプル体積は0より大きく、各濃度は0以上にしてください。",["a_addout","a_finalout"]);
+    return;
+  }
+  if(ct<c0){
+    showWarning("a_warn","目的濃度は現在濃度以上にしてください。",["a_addout","a_finalout"]);
+    return;
+  }
+  if(ct===c0){
+    hideWarning("a_warn");
+    setResult("a_addout",0,outU);
+    setResult("a_finalout",convertVolumeFromL(v0L,outU),outU);
+    return;
+  }
+  if(!(cs>ct)){
+    showWarning("a_warn","添加溶液の濃度は目的濃度より高くしてください。",["a_addout","a_finalout"]);
     return;
   }
 
-  warn.style.display="none";
+  hideWarning("a_warn");
   const vaddL=(ct-c0)*v0L/(cs-ct);
-  $("a_addout").textContent=fmt(convertVolumeFromL(vaddL,outU))+" "+outU;
-  $("a_finalout").textContent=fmt(convertVolumeFromL(v0L+vaddL,outU))+" "+outU;
+  setResult("a_addout",convertVolumeFromL(vaddL,outU),outU);
+  setResult("a_finalout",convertVolumeFromL(v0L+vaddL,outU),outU);
 }
 
 function calc5(){
   const mw=mwToGmol(num("mw5"),$("mw5u").value);
   const gl=massConcToGL(num("mc5"),$("mc5u").value);
   const L=volToL(num("v5"),$("v5u").value);
-  const g=gl*L;
-  const mol=g/mw;
   const amtU=$("amt5u").value;
   const massU=$("mass5u").value;
 
-  $("amt5out").textContent=fmt(convertAmountFromMol(mol,amtU))+" "+amtU;
-  $("mass5out").textContent=fmt(convertMassFromG(g,massU))+" "+massU;
+  if(!isPositive(mw) || !isNonnegative(gl) || !isNonnegative(L)){
+    showWarning("amount5warn","分子量は0より大きく、質量濃度と体積は0以上にしてください。",["amt5out","mass5out"]);
+    return;
+  }
+
+  hideWarning("amount5warn");
+  const g=gl*L;
+  const mol=g/mw;
+  setResult("amt5out",convertAmountFromMol(mol,amtU),amtU);
+  setResult("mass5out",convertMassFromG(g,massU),massU);
 }
 
 function calcAll(){ calc1(); calc2(); calc3(); calc4(); calc5(); }

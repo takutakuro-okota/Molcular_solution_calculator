@@ -1,7 +1,7 @@
 {
   "name": "試薬量計算ツール",
   "short_name": "試薬量計算",
-  "description": "分子量、濃度、体積、希釈、Stock添加などを計算する実験用ツール",
+  "description": "分子量、濃度、体積、希釈、濃度調整などを計算する実験用ツール",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
