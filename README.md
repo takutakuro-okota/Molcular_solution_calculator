@@ -1,2 +1,2 @@
 # Molcular_solution_calculator
-分子量などを計算するツール
+試薬量、サンプル量を計算します。
