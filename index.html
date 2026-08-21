@@ -160,15 +160,14 @@
     <div class="tabs">
       <label class="tab" for="tab-molar">質量濃度 → モル濃度</label>
       <label class="tab" for="tab-mass">目的濃度 → 必要質量</label>
-      <label class="tab" for="tab-dilution">Stockを希釈</label>
-      <label class="tab" for="tab-addstock">Stock添加で濃度調整</label>
+      <label class="tab" for="tab-dilution">希釈</label>
+      <label class="tab" for="tab-addstock">濃度調整</label>
       <label class="tab" for="tab-amount">質量濃度 → 物質量</label>
     </div>
 
     <section class="panel" id="molar">
     <div class="card">
       <h2>質量濃度 → モル濃度</h2>
-      <p class="desc">タンパク質の mg/mL などを µM などへ換算します。</p>
 
       <div class="row">
         <div>
@@ -188,7 +187,13 @@
         </div>
         <div>
           <label>単位</label>
-          <select id="mc1u"><option>mg/mL</option><option>g/L</option><option>µg/mL</option><option>ng/µL</option></select>
+          <select id="mc1u">
+          <option>g/L</option>
+          <option selected>mg/mL</option>
+          <option>µg/µL</option>
+          <option>µg/mL</option>
+          <option>ng/µL</option>
+        </select>
         </div>
       </div>
 
@@ -196,7 +201,12 @@
         <div></div>
         <div>
           <label>出力単位</label>
-          <select id="mol1u"><option>µM</option><option>mM</option><option>nM</option><option>M</option></select>
+          <select id="mol1u">
+          <option>M</option>
+          <option>mM</option>
+          <option selected>µM</option>
+          <option>nM</option>
+        </select>
         </div>
       </div>
 
@@ -215,7 +225,6 @@
   <section class="panel" id="mass">
     <div class="card">
       <h2>目的濃度 → 必要質量</h2>
-      <p class="desc">分子量、目的モル濃度、最終体積から、必要な試料の質量を計算します。</p>
 
       <div class="row">
         <div><label>分子量</label><input id="mw2" type="number" inputmode="decimal" value="0" step="any"></div>
@@ -248,11 +257,10 @@
 
   <section class="panel" id="dilution">
     <div class="card">
-      <h2>Stockを希釈</h2>
-      <p class="desc">Stock溶液を目的濃度まで希釈するときに、使用するStock量と加える希釈液量を計算します。</p>
+      <h2>希釈</h2>
 
       <div class="row">
-        <div><label>Stock濃度 C₁</label><input id="d_c1" type="number" inputmode="decimal" value="0" step="any"></div>
+        <div><label>原液濃度 C₁</label><input id="d_c1" type="number" inputmode="decimal" value="0" step="any"></div>
         <div><label>単位</label><select id="d_c1u"><option>M</option><option selected>mM</option><option>µM</option><option>nM</option></select></div>
       </div>
       <div class="row">
@@ -270,7 +278,7 @@
 
       <div class="result">
         <div class="result-head">
-          <div class="result-title">使用するStock量</div>
+          <div class="result-title">使用する原液量</div>
           <button class="copy-btn" type="button" data-copy-target="d_v1out">コピー</button>
         </div>
         <div class="result-value" id="d_v1out">—</div>
@@ -283,7 +291,7 @@
         <div class="small-result" id="d_bufout"></div>
         <div class="copy-status" id="d_bufout-status" aria-live="polite"></div>
 
-        <div class="warn" id="d_warn">目的濃度はStock濃度より低く設定してください。</div>
+        <div class="warn" id="d_warn">目的濃度は原液濃度より低く設定してください。</div>
       </div>
     </div>
   </section>
@@ -291,8 +299,7 @@
 
   <section class="panel" id="addstock">
     <div class="card">
-      <h2>Stock添加で濃度調整</h2>
-      <p class="desc">既存のサンプルにStock溶液を加えて目的濃度に調整します。Stock添加による体積増加も含めて計算します。</p>
+      <h2>濃度調整</h2>
 
       <div class="row">
         <div><label>現在のサンプル体積</label><input id="a_v0" type="number" inputmode="decimal" value="0" step="any"></div>
@@ -303,11 +310,11 @@
         <div><label>単位</label><select id="a_c0u"><option>M</option><option selected>mM</option><option>µM</option><option>nM</option></select></div>
       </div>
       <div class="row">
-        <div><label>Stock濃度 Cₛ</label><input id="a_cs" type="number" inputmode="decimal" value="0" step="any"></div>
+        <div><label>添加溶液の濃度 Cₛ</label><input id="a_cs" type="number" inputmode="decimal" value="0" step="any"></div>
         <div><label>単位</label><select id="a_csu"><option>M</option><option selected>mM</option><option>µM</option><option>nM</option></select></div>
       </div>
       <div class="row">
-        <div><label>目的最終濃度 Cₜ</label><input id="a_ct" type="number" inputmode="decimal" value="0" step="any"></div>
+        <div><label>目的濃度 Cₜ</label><input id="a_ct" type="number" inputmode="decimal" value="0" step="any"></div>
         <div><label>単位</label><select id="a_ctu"><option>M</option><option selected>mM</option><option>µM</option><option>nM</option></select></div>
       </div>
       <div class="row">
@@ -317,7 +324,7 @@
 
       <div class="result">
         <div class="result-head">
-          <div class="result-title">加えるStock量</div>
+          <div class="result-title">添加する溶液の量</div>
           <button class="copy-btn" type="button" data-copy-target="a_addout">コピー</button>
         </div>
         <div class="result-value" id="a_addout">—</div>
@@ -330,7 +337,7 @@
         <div class="small-result" id="a_finalout"></div>
         <div class="copy-status" id="a_finalout-status" aria-live="polite"></div>
 
-        <div class="warn" id="a_warn">Stock濃度は目的濃度より高く設定してください。</div>
+        <div class="warn" id="a_warn">原液濃度は目的濃度より高く設定してください。</div>
       </div>
       <div class="formula">計算式：Vadd = (Ct − C0) × V0 / (Cs − Ct)</div>
     </div>
@@ -340,7 +347,6 @@
   <section class="panel" id="amount">
     <div class="card">
       <h2>質量濃度 → 物質量</h2>
-      <p class="desc">分子量、質量濃度、使用体積から、物質量と使用した試料の質量を計算します。</p>
 
       <div class="row">
         <div><label>分子量</label><input id="mw5" type="number" inputmode="decimal" value="0" step="any"></div>
@@ -355,10 +361,14 @@
         <div><label>単位</label><select id="v5u"><option>L</option><option>mL</option><option selected>µL</option><option>nL</option></select></div>
       </div>
       <div class="row">
+        <div></div>
         <div>
           <label>物質量の出力単位</label>
           <select id="amt5u"><option>mol</option><option>mmol</option><option>µmol</option><option>nmol</option><option selected>pmol</option><option>fmol</option></select>
         </div>
+      </div>
+      <div class="row">
+        <div></div>
         <div>
           <label>質量の出力単位</label>
           <select id="mass5u"><option>g</option><option>mg</option><option selected>µg</option><option>ng</option><option>pg</option></select>
@@ -398,6 +408,7 @@ function molToM(v,u){ return v*({M:1,mM:1e-3,"µM":1e-6,nM:1e-9}[u]||1); }
 function volToL(v,u){ return v*({L:1,mL:1e-3,"µL":1e-6,nL:1e-9}[u]||1); }
 function massConcToGL(v,u){
   return v*({"g/L":1,"mg/mL":1,"µg/µL":1,"µg/mL":1e-3,"ng/µL":1}[u]||1);
+}[u]||1);
 }
 function fmt(x, digits=6){
   if(!Number.isFinite(x)) return "—";
