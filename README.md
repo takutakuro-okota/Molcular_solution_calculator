@@ -1,0 +1,2 @@
+# Molcular_solution_calculator
+分子量などを計算するツール
