@@ -1,11 +1,11 @@
-const CACHE_NAME = 'molecular-solution-calculator-v1';
+const CACHE_NAME = 'molecular-solution-v2';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './icon-180.svg',
-  './icon-192.svg',
-  './icon-512.svg'
+  './icon-180.png',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', event => {
