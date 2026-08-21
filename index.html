@@ -19,6 +19,7 @@
     --result:#eef9f0; --result-line:#cfe8d3;
   }
   *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
   body{
     margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;
     background:var(--bg); color:var(--text);
@@ -27,7 +28,11 @@
   h1{font-size:22px;margin:4px 0 6px}
   .sub{font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.5}
   .tabs{
-    display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+    margin-bottom:12px;
+    width:100%;
   }
   .tab-controls>input[type="radio"]{
     position:absolute;
@@ -35,11 +40,26 @@
     pointer-events:none;
   }
   .tab{
-    display:flex;align-items:center;justify-content:center;
-    border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 8px;
-    font-size:13px;font-weight:700;color:#374151;cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+    min-width:0;
+    height:48px;
+    padding:6px 8px;
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:12px;
+    font-size:13px;
+    line-height:1.2;
+    font-weight:700;
+    text-align:center;
+    color:#374151;
+    cursor:pointer;
+    overflow:hidden;
     -webkit-tap-highlight-color:transparent;
-    user-select:none;-webkit-user-select:none;
+    user-select:none;
+    -webkit-user-select:none;
     touch-action:manipulation;
   }
   .panel{display:none}
@@ -59,8 +79,19 @@
     background:var(--card);border:1px solid var(--line);border-radius:16px;
     padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.03);
   }
-  .card h2{font-size:18px;margin:0 0 4px}
-  .desc{font-size:13px;color:var(--muted);margin:0 0 16px}
+  .card h2{
+    font-size:18px;
+    line-height:1.35;
+    min-height:24px;
+    margin:0 0 4px;
+  }
+  .desc{
+    font-size:13px;
+    line-height:1.5;
+    min-height:40px;
+    color:var(--muted);
+    margin:0 0 16px;
+  }
   .row{display:grid;grid-template-columns:1fr 112px;gap:10px;margin-bottom:12px}
   .row.single{grid-template-columns:1fr}
   label{display:block;font-size:13px;font-weight:700;margin:0 0 6px}
@@ -78,6 +109,39 @@
   .small-result{font-size:16px;font-weight:700;margin-top:8px}
   .warn{font-size:12px;color:#b45309;margin-top:8px;display:none}
   .formula{font-size:12px;color:var(--muted);margin-top:10px}
+  .result-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:4px;
+  }
+  .copy-btn{
+    flex:0 0 auto;
+    border:1px solid var(--line);
+    background:#fff;
+    color:#374151;
+    border-radius:9px;
+    padding:7px 10px;
+    font-size:12px;
+    font-weight:700;
+    line-height:1;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+  }
+  .copy-btn:active{transform:translateY(1px)}
+  .copy-status{
+    min-height:16px;
+    margin-top:5px;
+    font-size:11px;
+    color:#4b5563;
+  }
+  .sub-result-head{
+    margin-top:12px;
+    padding-top:10px;
+    border-top:1px solid var(--result-line);
+  }
   footer{font-size:11px;color:var(--muted);margin-top:16px;line-height:1.5}
 </style>
 </head>
@@ -94,7 +158,7 @@
     <input type="radio" name="tabs" id="tab-amount">
 
     <div class="tabs">
-      <label class="tab" for="tab-molar">質量濃度 → µM</label>
+      <label class="tab" for="tab-molar">質量濃度 → モル濃度</label>
       <label class="tab" for="tab-mass">必要質量</label>
       <label class="tab" for="tab-dilution">希釈</label>
       <label class="tab" for="tab-addstock">Stock添加</label>
@@ -137,8 +201,12 @@
       </div>
 
       <div class="result">
-        <div class="result-title">モル濃度</div>
+        <div class="result-head">
+          <div class="result-title">モル濃度</div>
+          <button class="copy-btn" type="button" data-copy-target="mol1out">コピー</button>
+        </div>
         <div class="result-value" id="mol1out">—</div>
+        <div class="copy-status" id="mol1out-status" aria-live="polite"></div>
       </div>
     </div>
   </section>
@@ -165,8 +233,12 @@
         <div><label>出力単位</label><select id="mass2u"><option>µg</option><option>mg</option><option>ng</option><option>g</option></select></div>
       </div>
       <div class="result">
-        <div class="result-title">必要質量</div>
+        <div class="result-head">
+          <div class="result-title">必要質量</div>
+          <button class="copy-btn" type="button" data-copy-target="mass2out">コピー</button>
+        </div>
         <div class="result-value" id="mass2out">—</div>
+        <div class="copy-status" id="mass2out-status" aria-live="polite"></div>
       </div>
     </div>
   </section>
@@ -189,9 +261,20 @@
         <div><label>単位</label><select id="d_v2u"><option>µL</option><option>mL</option><option>L</option><option>nL</option></select></div>
       </div>
       <div class="result">
-        <div class="result-title">必要Stock量</div>
+        <div class="result-head">
+          <div class="result-title">必要Stock量</div>
+          <button class="copy-btn" type="button" data-copy-target="d_v1out">コピー</button>
+        </div>
         <div class="result-value" id="d_v1out">—</div>
+        <div class="copy-status" id="d_v1out-status" aria-live="polite"></div>
+
+        <div class="result-head sub-result-head">
+          <div class="result-title">溶媒量</div>
+          <button class="copy-btn" type="button" data-copy-target="d_bufout">コピー</button>
+        </div>
         <div class="small-result" id="d_bufout"></div>
+        <div class="copy-status" id="d_bufout-status" aria-live="polite"></div>
+
         <div class="warn" id="d_warn">目的濃度はStock濃度より低くしてください。</div>
       </div>
     </div>
@@ -220,9 +303,20 @@
       </div>
 
       <div class="result">
-        <div class="result-title">加えるStock量</div>
+        <div class="result-head">
+          <div class="result-title">加えるStock量</div>
+          <button class="copy-btn" type="button" data-copy-target="a_addout">コピー</button>
+        </div>
         <div class="result-value" id="a_addout">—</div>
+        <div class="copy-status" id="a_addout-status" aria-live="polite"></div>
+
+        <div class="result-head sub-result-head">
+          <div class="result-title">添加後体積</div>
+          <button class="copy-btn" type="button" data-copy-target="a_finalout">コピー</button>
+        </div>
         <div class="small-result" id="a_finalout"></div>
+        <div class="copy-status" id="a_finalout-status" aria-live="polite"></div>
+
         <div class="warn" id="a_warn">Stock濃度は目的濃度より高くしてください。</div>
       </div>
       <div class="formula">式：Vadd = (Ct − C0) × V0 / (Cs − Ct)</div>
@@ -247,9 +341,19 @@
         <div><label>単位</label><select id="v5u"><option>µL</option><option>mL</option><option>L</option><option>nL</option></select></div>
       </div>
       <div class="result">
-        <div class="result-title">物質量</div>
+        <div class="result-head">
+          <div class="result-title">物質量</div>
+          <button class="copy-btn" type="button" data-copy-target="amt5out">コピー</button>
+        </div>
         <div class="result-value" id="amt5out">—</div>
+        <div class="copy-status" id="amt5out-status" aria-live="polite"></div>
+
+        <div class="result-head sub-result-head">
+          <div class="result-title">質量</div>
+          <button class="copy-btn" type="button" data-copy-target="mass5out">コピー</button>
+        </div>
         <div class="small-result" id="mass5out"></div>
+        <div class="copy-status" id="mass5out-status" aria-live="polite"></div>
       </div>
     </div>
   </section>
@@ -304,7 +408,7 @@ function calc3(){
   warn.style.display="none";
   const v1=c2*v2/c1;
   $("d_v1out").textContent=fmt(v1)+" µL";
-  $("d_bufout").textContent="溶媒： "+fmt(v2-v1)+" µL";
+  $("d_bufout").textContent=fmt(v2-v1)+" µL";
 }
 function calc4(){
   const v0=volToUL(num("a_v0"),$("a_v0u").value);
@@ -318,7 +422,7 @@ function calc4(){
   warn.style.display="none";
   const vadd=(ct-c0)*v0/(cs-ct);
   $("a_addout").textContent=fmt(vadd)+" µL";
-  $("a_finalout").textContent="添加後体積： "+fmt(v0+vadd)+" µL";
+  $("a_finalout").textContent=fmt(v0+vadd)+" µL";
 }
 function calc5(){
   const mw=mwToGmol(num("mw5"),$("mw5u").value);
@@ -327,9 +431,69 @@ function calc5(){
   const g=gl*L;
   const mol=g/mw;
   $("amt5out").textContent=fmt(mol*1e12)+" pmol";
-  $("mass5out").textContent="質量： "+fmt(g*1e6)+" µg";
+  $("mass5out").textContent=fmt(g*1e6)+" µg";
 }
 function calcAll(){calc1();calc2();calc3();calc4();calc5();}
+
+async function copyText(text){
+  if(!text || text==="—") return false;
+
+  if(navigator.clipboard && window.isSecureContext){
+    try{
+      await navigator.clipboard.writeText(text);
+      return true;
+    }catch(e){}
+  }
+
+  const ta=document.createElement("textarea");
+  ta.value=text;
+  ta.setAttribute("readonly","");
+  ta.style.position="fixed";
+  ta.style.opacity="0";
+  ta.style.left="-9999px";
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  ta.setSelectionRange(0, ta.value.length);
+
+  let ok=false;
+  try{ ok=document.execCommand("copy"); }catch(e){ ok=false; }
+  document.body.removeChild(ta);
+  return ok;
+}
+
+
+
+function extractNumericValue(text){
+  if(!text) return "";
+  const trimmed=text.trim();
+  if(trimmed==="—") return "";
+  const m=trimmed.match(/[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?/);
+  return m ? m[0] : "";
+}
+
+document.querySelectorAll("[data-copy-target]").forEach(btn=>{
+  btn.addEventListener("click", async ()=>{
+    const targetId=btn.dataset.copyTarget;
+    const target=$(targetId);
+    const status=$(targetId+"-status");
+    const value=extractNumericValue(target ? target.textContent : "");
+
+    if(!value){
+      if(status) status.textContent="コピーできる計算結果がありません";
+      return;
+    }
+
+    const ok=await copyText(value);
+    if(status) status.textContent=ok ? "数値をコピーしました" : "コピーできませんでした";
+
+    window.clearTimeout(btn.__statusTimer);
+    btn.__statusTimer=window.setTimeout(()=>{
+      if(status) status.textContent="";
+    },1600);
+  });
+});
+
 document.querySelectorAll("input,select").forEach(el=>el.addEventListener("input",calcAll));
 document.querySelectorAll("select").forEach(el=>el.addEventListener("change",calcAll));
 calcAll();

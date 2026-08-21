@@ -1,4 +1,4 @@
-const CACHE_NAME = 'molecular-solution-v2';
+const CACHE_NAME = 'molecular-solution-v4';
 const ASSETS = [
   './',
   './index.html',
