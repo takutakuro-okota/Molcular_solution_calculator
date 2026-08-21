@@ -408,7 +408,6 @@ function molToM(v,u){ return v*({M:1,mM:1e-3,"µM":1e-6,nM:1e-9}[u]||1); }
 function volToL(v,u){ return v*({L:1,mL:1e-3,"µL":1e-6,nL:1e-9}[u]||1); }
 function massConcToGL(v,u){
   return v*({"g/L":1,"mg/mL":1,"µg/µL":1,"µg/mL":1e-3,"ng/µL":1}[u]||1);
-}[u]||1);
 }
 function fmt(x, digits=6){
   if(!Number.isFinite(x)) return "—";
